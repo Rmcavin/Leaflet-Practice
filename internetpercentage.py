@@ -8,6 +8,7 @@
 ##Author: Rachel Cavin
 ##Date: October 30th, 2016
 
+import sys
 import argparse
 import re
 
@@ -23,16 +24,20 @@ population_filename = args.P
 
 #Create a function getdata that will read multiple file names to increase reusability.
 def getdata(filename, dictionary):
-    with open(filename, 'r') as textfile:
-        for line in textfile:
-            split_data = re.split('  +', line.strip())
-            country = split_data[1]
-            value = split_data[2]
-            if country in dictionary:
-                dictionary[country].append(value)
-            else:
-                dictionary[country] = [value]
-    return;
+    try:
+        with open(filename, 'r') as textfile:
+            for line in textfile:
+                split_data = re.split('  +', line.strip())
+                country = split_data[1]
+                value = split_data[2]
+                if country in dictionary:
+                    dictionary[country].append(value)
+                else:
+                    dictionary[country] = [value]
+        return;
+    except IOError as e:
+        print e
+        sys.exit(1)
 
 def getpercentage(dictionary):
     for key, value in dictionary.viewitems():
