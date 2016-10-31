@@ -10,6 +10,7 @@
 
 import argparse
 import re
+import os
 
 #Gets text file arguments, text files are CIA World Book downloads for country population and internet use.
 parser = argparse.ArgumentParser(description = 'Calculates percentage of country populations that use the internet.')
@@ -21,8 +22,18 @@ args = parser.parse_args()
 int_users_filename = args.I
 population_filename = args.P
 
+#Check if files exist.
+FILES_EXIST = False
+if os.path.exists(int_users_filename) and os.path.exists(population_filename):
+    FILES_EXIST = True
+
+if not FILES_EXIST:
+    print "ERROR : [-] Files don't exist. Please enter the correct file paths."
+    exit(0)
+
 #Create a function getdata that will read multiple file names to increase reusability.
 def getdata(filename, dictionary):
+
     with open(filename, 'r') as textfile:
         for line in textfile:
             split_data = re.split('  +', line.strip())
