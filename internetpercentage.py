@@ -13,8 +13,8 @@ import re
 
 #Gets text file arguments, text files are CIA World Book downloads for country population and internet use.
 parser = argparse.ArgumentParser(description = 'Calculates percentage of country populations that use the internet.')
-parser.add_argument('--I', help = 'Path to Internet Users Text File')
-parser.add_argument('--P', help = 'Path to Population Text File')
+parser.add_argument('I', help = 'Path to Internet Users Text File')
+parser.add_argument('P', help = 'Path to Population Text File')
 args = parser.parse_args()
 
 #Sets text file variables.
