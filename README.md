@@ -9,9 +9,9 @@ You can download the data on the following links:
 [Population per Country in order](https://www.cia.gov/library/publications/the-world-factbook/rankorder/rawdata_2119.txt)
 
 # How to prepare the data?
-You just change the data above if you need to show a specific country (in this case just delete lines with other countrys). Because the execution with the original data results in the percentage of internet users per country of each country in the file.
+You just change the data above if you need to show a specific country (in this case just delete lines with other countrys or create your own test like the example). Because the execution with the original data results in the percentage of internet users per country of each country in the file.
 
-# How to use the program
+# How to use the program?
 Suppose the name of file with the  Number of Internet Users per Country is named as "internet\_users.txt" and the name of Population per Country is named as "population.txt".
 
 You execute will execute:  python internetpercentage.py --I internet\_users.txt --P population.txt
