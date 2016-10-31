@@ -43,3 +43,10 @@ def getpercentage(dictionary):
         #    print key
     return;
 
+#Gets the data from two seperate text files, one for population and one for internet users.
+combined_data = {}
+
+getdata(int_users_filename, combined_data)
+getdata(population_filename, combined_data)
+getpercentage(combined_data)
+print combined_data
