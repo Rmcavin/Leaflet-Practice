@@ -43,10 +43,21 @@ def getpercentage(dictionary):
         #    print key
     return;
 
+#Given dictionary and number of items, find the entries with less than num_items
+def findGaps(dictionary, num_items):
+    gaps = []
+    for key, value in dictionary.viewitems():
+        print key, len(value)
+        if len(value) != num_items:
+            gaps.append(key)
+    return gaps
+
 #Gets the data from two seperate text files, one for population and one for internet users.
 combined_data = {}
 
 getdata(int_users_filename, combined_data)
 getdata(population_filename, combined_data)
+print findGaps(combined_data, 2)
 getpercentage(combined_data)
+
 print combined_data
