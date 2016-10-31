@@ -33,3 +33,13 @@ def getdata(filename, dictionary):
             else:
                 dictionary[country] = [value]
     return;
+
+def getpercentage(dictionary):
+    for key, value in dictionary.viewitems():
+        if len(value) == 2:
+            percent = float(value[0].replace(',','')) / float(value[1].replace(',','')) * 100
+            value.append(str('{0:.2f}'.format(percent)))
+        #else:
+        #    print key
+    return;
+
