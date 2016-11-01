@@ -54,12 +54,26 @@ def findGaps(dictionary, num_items):
             gaps.append(key)
     return gaps
 
+def display_help_message():
+    print """
+        Usage:
+
+        --I <Path to Internet Users Text File>
+        ex: python internetpercentage.py --I data.txt
+
+        --P <Path to Population Text File>
+        ex: python internetpercentage.py --P ../data.txt
+        """
+
 #Gets the data from two seperate text files, one for population and one for internet users.
 combined_data = {}
 
-getdata(int_users_filename, combined_data)
-getdata(population_filename, combined_data)
-print findGaps(combined_data, 2)
-getpercentage(combined_data)
+if int_users_filename or population_filename:
+    getdata(int_users_filename, combined_data)
+    getdata(population_filename, combined_data)
+    print findGaps(combined_data, 2)
+    getpercentage(combined_data)
 
-print combined_data
+    print combined_data
+else:
+    display_help_message()
