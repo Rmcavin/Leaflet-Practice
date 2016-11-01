@@ -24,17 +24,20 @@ population_filename = args.P
 
 #Create a function getdata that will read multiple file names to increase reusability.
 def getdata(filename, dictionary):
-    if filename and os.path.isfile(filename):
-        with open(filename, 'r') as textfile:
-            for line in textfile:
-                split_data = re.split('  +', line.strip())
-                country = split_data[1]
-                value = split_data[2]
-                if country in dictionary:
-                    dictionary[country].append(value)
-                else:
-                    dictionary[country] = [value]
-        return;
+    if filename:
+        if os.path.isfile(filename):
+            with open(filename, 'r') as textfile:
+                for line in textfile:
+                    split_data = re.split('  +', line.strip())
+                    country = split_data[1]
+                    value = split_data[2]
+                    if country in dictionary:
+                        dictionary[country].append(value)
+                    else:
+                        dictionary[country] = [value]
+            return;
+        else:
+            print "File '{0}' not found!".format(filename)
 
 def getpercentage(dictionary):
     for key, value in dictionary.viewitems():
@@ -54,26 +57,17 @@ def findGaps(dictionary, num_items):
             gaps.append(key)
     return gaps
 
-def display_help_message():
-    print """
-        Usage:
-
-        --I <Path to Internet Users Text File>
-        ex: python internetpercentage.py --I data.txt
-
-        --P <Path to Population Text File>
-        ex: python internetpercentage.py --P ../data.txt
-        """
-
 #Gets the data from two seperate text files, one for population and one for internet users.
 combined_data = {}
 
 if int_users_filename or population_filename:
     getdata(int_users_filename, combined_data)
     getdata(population_filename, combined_data)
-    print findGaps(combined_data, 2)
-    getpercentage(combined_data)
 
-    print combined_data
+    if combined_data:
+        print findGaps(combined_data, 2)
+        getpercentage(combined_data)
+
+        print combined_data
 else:
-    display_help_message()
+    parser.print_help()
