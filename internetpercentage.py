@@ -10,6 +10,7 @@
 
 import argparse
 import re
+import os.path
 
 #Gets text file arguments, text files are CIA World Book downloads for country population and internet use.
 parser = argparse.ArgumentParser(description = 'Calculates percentage of country populations that use the internet.')
@@ -23,16 +24,20 @@ population_filename = args.P
 
 #Create a function getdata that will read multiple file names to increase reusability.
 def getdata(filename, dictionary):
-    with open(filename, 'r') as textfile:
-        for line in textfile:
-            split_data = re.split('  +', line.strip())
-            country = split_data[1]
-            value = split_data[2]
-            if country in dictionary:
-                dictionary[country].append(value)
-            else:
-                dictionary[country] = [value]
-    return;
+    if filename:
+        if os.path.isfile(filename):
+            with open(filename, 'r') as textfile:
+                for line in textfile:
+                    split_data = re.split('  +', line.strip())
+                    country = split_data[1]
+                    value = split_data[2]
+                    if country in dictionary:
+                        dictionary[country].append(value)
+                    else:
+                        dictionary[country] = [value]
+            return;
+        else:
+            print "File '{0}' not found!".format(filename)
 
 def getpercentage(dictionary):
     for key, value in dictionary.viewitems():
@@ -55,9 +60,14 @@ def findGaps(dictionary, num_items):
 #Gets the data from two seperate text files, one for population and one for internet users.
 combined_data = {}
 
-getdata(int_users_filename, combined_data)
-getdata(population_filename, combined_data)
-print findGaps(combined_data, 2)
-getpercentage(combined_data)
+if int_users_filename or population_filename:
+    getdata(int_users_filename, combined_data)
+    getdata(population_filename, combined_data)
 
-print combined_data
+    if combined_data:
+        print findGaps(combined_data, 2)
+        getpercentage(combined_data)
+
+        print combined_data
+else:
+    parser.print_help()
