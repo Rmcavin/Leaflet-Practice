@@ -22,16 +22,15 @@ int_users_filename = args.I
 population_filename = args.P
 
 #Create a function getdata that will read multiple file names to increase reusability.
-def getdata(filename, dictionary):
-    with open(filename, 'r') as textfile:
-        for line in textfile:
-            split_data = re.split('  +', line.strip())
-            country = split_data[1]
-            value = split_data[2]
-            if country in dictionary:
-                dictionary[country].append(value)
-            else:
-                dictionary[country] = [value]
+def getdata(lines, dictionary):
+    for line in lines:
+        split_data = re.split('  +', line.strip())
+        country = split_data[1]
+        value = split_data[2]
+        if country in dictionary:
+            dictionary[country].append(value)
+        else:
+            dictionary[country] = [value]
     return;
 
 def getpercentage(dictionary):
@@ -54,10 +53,14 @@ def findGaps(dictionary, num_items):
 
 #Gets the data from two seperate text files, one for population and one for internet users.
 combined_data = {}
+with open(int_users_filename, 'r') as textfile:
+    lines = textfile.read().splitlines()
+    getdata(lines, combined_data)
+with open(population_filename, 'r') as textfile:
+    lines = textfile.read().splitlines()
+    getdata(lines, combined_data)
 
-getdata(int_users_filename, combined_data)
-getdata(population_filename, combined_data)
-print findGaps(combined_data, 2)
+#print findGaps(combined_data, 2)
 getpercentage(combined_data)
 
 print combined_data
