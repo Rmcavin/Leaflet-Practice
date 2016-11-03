@@ -5,3 +5,5 @@
 import unittest
 from internetpercentage import getdata, getpercentage, findGaps
 
+if __name__ == '__main__':
+    unittest.main()
