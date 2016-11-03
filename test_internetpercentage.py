@@ -15,5 +15,12 @@ class TestInternetPercentage(unittest.TestCase):
         getdata(self.list2, self.dictionary)
         self.assertEqual(self.dictionary, {'China': ['626600000','1373541278']})
 
+    def test_get_percentage(self):
+        self.test_int_users = '25'
+        self.test_population = '100'
+        self.dictionary = {'China': ['25', '100']}
+        getpercentage(self.dictionary)
+        self.assertEqual('25.00', self.dictionary['China'][2])
+
 if __name__ == '__main__':
     unittest.main()
