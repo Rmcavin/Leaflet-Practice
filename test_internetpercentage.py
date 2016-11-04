@@ -31,6 +31,11 @@ class TestInternetPercentage(unittest.TestCase):
         getpercentage(self.dictionary)
         self.assertEqual('25.00', self.dictionary['China'][2])
 
+    ##test_get_percentage_wrongvalues - test to ensure error messages occur
+    ##  if dividing by zero or if negative numbers are present.
+
+    ##test_get_percentage_nonumbers - test to ensure error messages occur
+    ##    if there are letters in the value fields of the text file.
 
     ##test_find_gaps
     def test_find_gaps(self):
