@@ -15,6 +15,15 @@ class TestInternetPercentage(unittest.TestCase):
         getdata(self.list2, self.dictionary)
         self.assertEqual(self.dictionary, {'China': ['626600000','1373541278']})
 
+    ##test_get_data_missing_values - test to ensure it can handle a text file
+    ##    with values missing or different formatting. One test for each values
+
+    ##test_get_data_delineation - test to ensure it can handle text files that
+    ##    aren't white space delineated, for example comma or tab delineations.
+
+    ##test_get_data_inputissues - test to ensure it throws errors in case of
+    ##     inproper inputs.
+
     def test_get_percentage(self):
         self.test_int_users = '25'
         self.test_population = '100'
