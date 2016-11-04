@@ -43,5 +43,10 @@ class TestInternetPercentage(unittest.TestCase):
         self.num_items = 2
         self.assertEqual([], findGaps(self.dictionary, self.num_items))
 
+        ##test_find_gaps2 - test on data that has gaps.
+
+        ##test_find_gaps_baddata - test on a dictionary that is a list or string
+
+
 if __name__ == '__main__':
     unittest.main()
