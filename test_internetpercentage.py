@@ -22,5 +22,12 @@ class TestInternetPercentage(unittest.TestCase):
         getpercentage(self.dictionary)
         self.assertEqual('25.00', self.dictionary['China'][2])
 
+
+    ##test_find_gaps
+    def test_find_gaps(self):
+        self.dictionary = {'China':['25','100']}
+        self.num_items = 2
+        self.assertEqual([], findGaps(self.dictionary, self.num_items))
+
 if __name__ == '__main__':
     unittest.main()
