@@ -10,16 +10,21 @@
 
 import argparse
 import re
+import geojson
 
 #Gets text file arguments, text files are CIA World Book downloads for country population and internet use.
 parser = argparse.ArgumentParser(description = 'Calculates percentage of country populations that use the internet.')
 parser.add_argument('--I', help = 'Path to Internet Users Text File')
 parser.add_argument('--P', help = 'Path to Population Text File')
+parser.add_argument('--G', help = 'Path to GeoJSON country boundaries File')
+parser.add_argument('--D', help = 'Path to output GeoJSON file to use in Leaflet')
 args = parser.parse_args()
 
 #Sets text file variables.
 int_users_filename = args.I
 population_filename = args.P
+country_boundaries_filename = args.G
+output_data_filename = args.D
 
 #Create a function getdata that will read multiple file names to increase reusability.
 def getdata(lines, dictionary):
@@ -51,6 +56,17 @@ def findGaps(dictionary, num_items):
             gaps.append(key)
     return gaps
 
+def appendValue(dictionary, geoJson):
+    for feature in geoJson["features"]:
+        country = feature["properties"]["geounit"]
+
+        if country in dictionary and len(dictionary[country]) == 3:
+            feature["properties"].update({"int_percent": dictionary[country][2]})
+            #feature["properties"]["int_percent"] = dictionary[country][2]
+            #print feature["properties"]
+        #else:
+            #print country
+
 #Gets the data from two seperate text files, one for population and one for internet users.
 combined_data = {}
 with open(int_users_filename, 'r') as textfile:
@@ -60,7 +76,17 @@ with open(population_filename, 'r') as textfile:
     lines = textfile.read().splitlines()
     getdata(lines, combined_data)
 
-#print findGaps(combined_data, 2)
 getpercentage(combined_data)
+
+with open(country_boundaries_filename, 'r') as textfile:
+    boundaries = geojson.load(textfile)
+    appendValue(combined_data, boundaries)
+    map_data = geojson.dumps(boundaries)
+
+    with open(output_data_filename, "w") as output:
+        output.write(map_data)
+    #print boundaries
+    #print findGaps(combined_data, 2)
+
 
 print combined_data
