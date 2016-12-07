@@ -14,7 +14,7 @@ You just change the data above if you need to show a specific country (in this c
 # How to use the program?
 Suppose the name of file with the  Number of Internet Users per Country is named as "internet\_users.txt" and the name of Population per Country is named as "population.txt".
 
-You execute will execute:  python internetpercentage.py --I internet\_users.txt --P population.txt
+Execute:  python internetpercentage.py --I internet\_users.txt --P population.txt
 
 #How understand the result of the execution?
 
