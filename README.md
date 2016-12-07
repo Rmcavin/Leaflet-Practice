@@ -16,10 +16,10 @@ Suppose the name of file with the  Number of Internet Users per Country is named
 
 You execute will execute:  python internetpercentage.py --I internet\_users.txt --P population.txt
 
-#How understant the result of the execution?
+#How understand the result of the execution?
 
-The execution will show the result as a json and for each country you will have sometihng like this:
+The execution will show the result as a json and for each country you will have something like this:
 'Country':['internet\_users','population','percentage of internet users']
 
-For example, Brasil case result:
+For example, Brazil case result:
 'Brazil': ['108,200,000', '205,823,665', '52.57']
