@@ -1,0 +1,123 @@
+<!-- Purpose: To visualize internet usage data by country using Leaflet.
+Author: Rachel Cavin
+Date: 11/25/2016 -->
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+<script src="map_data.js"></script>
+
+<body>
+<style>
+  h1 {
+    text-align: center;
+    font-size: 18;
+    font-family: Arial;
+  }
+
+  #Map {
+    width: 1000px;
+    height: 600px;
+  }
+</style>
+<section id = "Title">
+  <div>
+  <h1>Percent of Country Populations Using the Internet</h1>
+  </div>
+</section>
+
+<section id = "Map">
+<div id="map">
+
+  <script>
+    //var GeoJSON = null;
+
+     //function loadGeoJSON(callback)  {
+
+      //var myJSON = new XMLHttpRequest();
+        //myJSON.overrideMimeType("application/json");
+      //myJSON.open('GET', 'map_data.json', true);
+      //myJSON.onreadystatechange = function () {
+        //if (myJSON.readyState == 4 && myJSON.status == "200") {
+          //  callback(myJSON.responseText);
+        //}
+      //};
+      //myJSON.send(null);
+    //}
+
+    //function init() {
+      //loadGeoJSON(function(response) {
+        //var GeoJSON = JSON.parse(response);
+      //});
+    //}
+
+    var geojson;
+    var map = L.map('map').setView([30.0,-10.0],2);
+
+    L.tileLayer('https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=49eb1ba0b0eb407a9742f2ff162c119c', {
+	     attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	      apikey: '49eb1ba0b0eb407a9742f2ff162c119c'
+      }).addTo(map);
+
+    L.geoJson(map_data)
+
+    console.log("adding data to map")
+
+    function addColor(d) {
+      return d > 80 ?  '#006d2c' :
+           d > 60  ? '#31a354' :
+           d > 40  ? '#74c476' :
+           d > 20  ? '#bae4b3' :
+           d > 0   ? '#edf8e9' :
+                      '#FFFFFF';
+    }
+
+    function color(feature) {
+      return {
+          fillColor: addColor(feature.properties.int_percent),
+          weight: 2,
+          opacity: 1,
+          color: 'white',
+          dashArray: '3',
+          fillOpacity: 0.7
+      };
+    }
+
+    function highlightFeature(e) {
+        var layer = e.target;
+
+        layer.setStyle({
+            weight: 2,
+            color: '#555',
+            dashArray: '',
+            fillOpacity: 0.7
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+    }
+
+    function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+    }
+
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds());
+    }
+
+    function onEachFeature(feature, layer) {
+      layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+      });
+    }
+
+    geojson = L.geoJson(map_data, {style: color, onEachFeature: onEachFeature}).addTo(map);
+
+
+
+  </script>
+  </div>
+</section>
+</body>
