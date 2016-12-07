@@ -2,28 +2,109 @@
 Author: Rachel Cavin
 Date: 11/25/2016 -->
 
+<!-- Style Guides -->
+<script src="https://use.fontawesome.com/02a4e62559.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
 <script src="map_data.js"></script>
 
 <body>
 <style>
+.Footer {
+  margin-top: 100px;
+}
+
+body {
+  font-family: Verdana;
+  background-color: #E5F3E4;
+}
+
+p {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+hr {
+  border-top: 2px solid #8c8b8b;
+}
+
+a {
+  color: white;
+}
+
+.container {
+  width: 100%;
+  height: 60px;
+  margin: 0px;
+  top:0;
+  z-index:100;
+
+  position: fixed;
+  background-color: #5cb85c;
+
+}
+
   h1 {
     text-align: center;
     font-size: 18;
     font-family: Arial;
+    margin-top: 100px;
   }
 
   #Map {
+    margin: auto;
     width: 1000px;
     height: 600px;
   }
+
+  .info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+  }
+  .info h4 {
+      margin: 0 0 5px;
+      color: #777;
+  }
+
+  .legend {
+    line-height: 18px;
+    color: #555;
+  }
+  .legend i {
+      width: 18px;
+      height: 18px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.7;
+  }
+
+
 </style>
-<section id = "Title">
-  <div>
-  <h1>Percent of Country Populations Using the Internet</h1>
-  </div>
-</section>
+<!-- Navigation -->
+  <section id:"Navigation">
+    <div class="container text-right align-top">
+      <a href="http://rmcavin.github.io/index.html"><h2 class="btn btn-success text-bold"><b>Home</b></h2></a>
+    </div>
+  </section>
+
+  <section id = "Title">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12"><h1 class = "text-center">Percent of Country Populations Using the Internet</h1></div>
+      </div>
+    </div>
+  </section>
+
 
 <section id = "Map">
 <div id="map">
@@ -54,7 +135,7 @@ Date: 11/25/2016 -->
     var map = L.map('map').setView([30.0,-10.0],2);
 
     L.tileLayer('https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=49eb1ba0b0eb407a9742f2ff162c119c', {
-	     attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	     attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>&copy; <a href="https://www.cia.gov/library/publications/the-world-factbook/">CIA World Factbook</a>',
 	      apikey: '49eb1ba0b0eb407a9742f2ff162c119c'
       }).addTo(map);
 
@@ -94,11 +175,15 @@ Date: 11/25/2016 -->
 
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
+
+        info.update(layer.feature.properties);
         }
     }
 
     function resetHighlight(e) {
         geojson.resetStyle(e.target);
+
+        info.update();
     }
 
     function zoomToFeature(e) {
@@ -115,9 +200,62 @@ Date: 11/25/2016 -->
 
     geojson = L.geoJson(map_data, {style: color, onEachFeature: onEachFeature}).addTo(map);
 
+    var info = L.control();
 
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info');
+        this.update();
+        return this._div;
+    };
+
+    info.update = function (props) {
+    this._div.innerHTML = '<h4>Percent of population that uses the internet.</h4>' +  (props ?
+        '<b>' + props.name + '</b><br />' + props.int_percent + ' %'
+        : 'Hover over a country.');
+    };
+
+    info.addTo(map);
+
+    var legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = [0, 20, 40, 60, 80],
+            labels = [];
+
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + addColor(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+
+        return div;
+    };
+
+    legend.addTo(map);
 
   </script>
   </div>
 </section>
+
+<!-- Footer -->
+<section id="footer" class="Footer">
+  <hr>
+  <p>
+    <div class="contact row text-center">
+      <div class=" col-md-3"></div>
+      <div class=" col-md-1"><button class="btn btn-success contact-buttons"><i class="fa fa-medium"></i><a href="https://medium.com/@rmcavin"> Medium</a></button></div>
+      <div class=" col-md-1"><button class="btn btn-success contact-buttons"><i class="fa fa-github"></i><a href="https://github.com/Rmcavin"> Github</a></button></div>
+      <div class=" col-md-1"><button class="btn btn-success contact-buttons"><i class="fa fa-linkedin"></i><a href="https://www.linkedin.com/in/rachel-cavin-79036468"> Linkedin</a></button></div>
+      <div class=" col-md-1"><button class="btn btn-success contact-buttons"><i class="fa fa-codepen"></i><a href="http://codepen.io/rmcavin/"> Codepen</a></button></div>
+      <div class=" col-md-1"><button class="btn btn-success contact-buttons"><i class="fa fa-free-code-camp"></i><a href="https://www.freecodecamp.com/rmcavin"> Free Code Camp</a></button></div>
+      <div class=" col-md-3"></div>
+    </div>
+    <br>
+    <p class="text-center"><i class="fa fa-copyright"></i> Rachel Cavin, 2016</p>
+  </p>
+  </div>
+</section>
+
 </body>
