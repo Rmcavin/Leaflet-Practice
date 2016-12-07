@@ -11,6 +11,7 @@
 import argparse
 import re
 import geojson
+import json
 
 #Gets text file arguments, text files are CIA World Book downloads for country population and internet use.
 parser = argparse.ArgumentParser(description = 'Calculates percentage of country populations that use the internet.')
@@ -84,7 +85,9 @@ with open(country_boundaries_filename, 'r') as textfile:
     map_data = geojson.dumps(boundaries)
 
     with open(output_data_filename, "w") as output:
-        output.write(map_data)
+        for chunk in json.JSONEncoder().iterencode(boundaries):
+            output.write(chunk)
+
     #print boundaries
     #print findGaps(combined_data, 2)
 
